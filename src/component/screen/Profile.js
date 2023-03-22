@@ -40,11 +40,12 @@ const Profile = () => {
       // })
       //   .then((res) => res.json())
       //   .then((data) => {
-      //console.log(data)
+      console.log("image ", image);
       fetch("/updatepic", {
         method: "put",
         headers: {
           "Content-Type": "application/json",
+          mode: "cors",
           Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
@@ -60,7 +61,7 @@ const Profile = () => {
             JSON.stringify({ ...state, pic: result.pic })
           );
           dispatch({ type: "UPDATEPIC", payload: result.pic });
-          window.location.reload();
+          //window.location.reload();
         })
         .catch((err) => {
           console.log(err);
