@@ -5,9 +5,13 @@ const API_URL = process.env.REACT_APP_URL;
 
 const Home = () => {
   const [data, setData] = useState([]);
+  const [comment, setComment] = useState("");
+  const [profile, setProfile] = useState("");
   const { state, dispatch } = useContext(UserContext);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setProfile(user.pic);
     let unmounted = false;
     fetch(`${API_URL}/allpost`, {
       headers: {
@@ -16,7 +20,6 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log("Home: ", result);
         if (!unmounted) setData(result.posts);
       });
     return () => {
@@ -76,7 +79,7 @@ const Home = () => {
       .catch((err) => console.log(err));
   };
 
-  const makeComment = (text, postId) => {
+  const makeComment = (postId) => {
     fetch(`${API_URL}/comment`, {
       method: "put",
       headers: {
@@ -85,11 +88,13 @@ const Home = () => {
       },
       body: JSON.stringify({
         postId,
-        text,
+        text: comment,
       }),
     })
       .then((res) => res.json())
       .then((result) => {
+        setComment("");
+
         const newData = data.map((item) => {
           if (item._id == result._id) {
             return result;
@@ -97,6 +102,7 @@ const Home = () => {
             return item;
           }
         });
+
         setData(newData);
       })
       .catch((err) => console.log(err));
@@ -111,7 +117,6 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log("result: ", result);
         const newData = data.filter((item) => {
           return item._id !== result._id;
         });
@@ -125,17 +130,43 @@ const Home = () => {
         data.map((item) => {
           return (
             <div className="card home-card" key={item._id}>
-              <h5 style={{ padding: "5px" }}>
+              <h5
+                style={{
+                  padding: "2px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Link
                   to={
                     item.postedBy._id !== state._id
                       ? "/profile/" + item.postedBy._id
                       : "/profile"
                   }
+                  style={{
+                    display: "flex",
+                    paddingRight: "2px",
+                    // width: "50%",
+                  }}
                 >
+                  <img
+                    src={
+                      item.postedBy._id == state._id
+                        ? profile
+                        : "https://res.cloudinary.com/dtubo8vjd/image/upload/v1626606205/deflt_user_img_l9fxsp.png"
+                    }
+                    alt="user pic"
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "80px",
+                    }}
+                  />
                   {item.postedBy.name}
                 </Link>
-                {item.postedBy._id == state._id && (
+
+                {item.postedBy._id === state._id && (
                   <i
                     className="material-icons"
                     style={{
@@ -186,10 +217,15 @@ const Home = () => {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    makeComment(e.target[0].value, item._id);
+                    makeComment(item._id);
                   }}
                 >
-                  <input type="text" placeholder="add comment" />
+                  <input
+                    type="text"
+                    placeholder="add comment"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
                 </form>
               </div>
             </div>

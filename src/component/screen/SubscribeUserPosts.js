@@ -5,6 +5,7 @@ const API_URL = process.env.REACT_APP_URL;
 
 const Home = () => {
   const [data, setData] = useState([]);
+  const [comment, setComment] = useState("");
   const { state, dispatch } = useContext(UserContext);
   useEffect(() => {
     let unmounted = false;
@@ -75,7 +76,7 @@ const Home = () => {
       .catch((err) => console.log(err));
   };
 
-  const makeComment = (text, postId) => {
+  const makeComment = (postId) => {
     fetch(`${API_URL}/comment`, {
       method: "put",
       headers: {
@@ -84,12 +85,12 @@ const Home = () => {
       },
       body: JSON.stringify({
         postId,
-        text,
+        text: comment,
       }),
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        setComment("");
         const newData = data.map((item) => {
           if (item._id == result._id) {
             return result;
@@ -97,6 +98,7 @@ const Home = () => {
             return item;
           }
         });
+
         setData(newData);
       })
       .catch((err) => console.log(err));
@@ -185,10 +187,15 @@ const Home = () => {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  makeComment(e.target[0].value, item._id);
+                  makeComment(item._id);
                 }}
               >
-                <input type="text" placeholder="add comment" />
+                <input
+                  type="text"
+                  placeholder="add comment"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
               </form>
             </div>
           </div>

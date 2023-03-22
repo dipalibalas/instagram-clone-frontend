@@ -5,6 +5,7 @@ const API_URL = process.env.REACT_APP_URL;
 
 const Profile = () => {
   const [userProfile, setProfile] = useState();
+
   const { state, dispatch } = useContext(UserContext);
   const { userid } = useParams();
   const [showfollow, setShowFollow] = useState(
