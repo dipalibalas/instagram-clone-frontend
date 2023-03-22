@@ -13,7 +13,7 @@ const Home = () => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
-      //   .then((res) => res.json())
+      .then((res) => res.json())
       .then((result) => {
         //console.log(result);
         if (!unmounted) setData(result.posts);
@@ -34,7 +34,7 @@ const Home = () => {
         postId: id,
       }),
     })
-      //   .then((res) => res.json())
+      .then((res) => res.json())
       .then((result) => {
         //console.log(result);
         const newData = data.map((item) => {
@@ -87,7 +87,7 @@ const Home = () => {
         text,
       }),
     })
-      //   .then((res) => res.json())
+      .then((res) => res.json())
       .then((result) => {
         console.log(result);
         const newData = data.map((item) => {
@@ -109,7 +109,7 @@ const Home = () => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
-      //   .then((res) => res.json())
+      .then((res) => res.json())
       .then((result) => {
         console.log(result);
         const newData = data.filter((item) => {

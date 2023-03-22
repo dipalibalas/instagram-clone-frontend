@@ -14,7 +14,7 @@ const Profile = () => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
-      //   .then((res) => res.json())
+      .then((res) => res.json())
       .then((result) => {
         //console.log(result)
         if (!unmounted) setMyPics(result.mypost);
@@ -38,7 +38,7 @@ const Profile = () => {
         method: "post",
         body: data,
       })
-        // .then((res) => res.json())
+        .then((res) => res.json())
         .then((data) => {
           //console.log(data)
           fetch("/updatepic", {
@@ -51,7 +51,7 @@ const Profile = () => {
               pic: data.url,
             }),
           })
-            // .then((res) => res.json())
+            .then((res) => res.json())
             .then((result) => {
               localStorage.setItem(
                 "user",

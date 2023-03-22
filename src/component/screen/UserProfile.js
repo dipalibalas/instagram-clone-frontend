@@ -19,7 +19,7 @@ const Profile = () => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
-      //   .then((res) => res.json())
+      .then((res) => res.json())
       .then((result) => {
         //console.log(result)
         if (!unmounted) setProfile(result);
@@ -41,7 +41,7 @@ const Profile = () => {
         followId: userid,
       }),
     })
-      //   .then((res) => res.json())
+      .then((res) => res.json())
       .then((data) => {
         console.log(data);
         dispatch({
@@ -75,7 +75,7 @@ const Profile = () => {
         unfollowId: userid,
       }),
     })
-      //   .then((res) => res.json())
+      .then((res) => res.json())
       .then((data) => {
         console.log(data);
         dispatch({
