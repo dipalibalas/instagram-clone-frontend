@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { UserContext } from "../../App";
 import M from "materialize-css";
+const API_URL = process.env.REACT_APP_URL;
 
 const Signin = () => {
   const { state, dispatch } = useContext(UserContext);
@@ -18,7 +19,7 @@ const Signin = () => {
       M.toast({ html: "invalid email", classes: "#c62828 red darken-3" });
       return;
     }
-    fetch("/signin", {
+    fetch(`${API_URL}/signin`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +29,7 @@ const Signin = () => {
         password,
       }),
     })
-      .then((res) => res.json())
+      // .then((res) => res.json())
       .then((data) => {
         //console.log(data);
         if (data.error) {
