@@ -51,8 +51,12 @@ const Profile = () => {
               pic: data.url,
             }),
           })
-            .then((res) => res.json())
+            // .then((res) => {
+            //   //console.log("res:" + res.json());
+            //   res.json();
+            // })
             .then((result) => {
+              console.log("result:" + result);
               localStorage.setItem(
                 "user",
                 JSON.stringify({ ...state, pic: result.pic })
