@@ -28,70 +28,69 @@ const Profile = () => {
 
   useEffect(() => {
     if (image) {
-      // const data = new FormData();
-      // data.append("file", image);
-      // data.append("upload_preset", "instagram-clone");
-      // data.append("cloud_name", "dtubo8vjd");
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "instagram-clone");
+      data.append("cloud_name", "dtubo8vjd");
 
-      // // request to cloudinary
-      // fetch("https://api.cloudinary.com/v1_1/dtubo8vjd/image/upload", {
-      //   method: "post",
-      //   body: data,
-      // })
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      console.log("image ", image);
-      fetch("/updatepic", {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          mode: "cors",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-        },
-        body: JSON.stringify({
-          // pic: data.url,
-          pic: image,
-        }),
+      // request to cloudinary
+      fetch("https://api.cloudinary.com/v1_1/dtubo8vjd/image/upload", {
+        method: "post",
+        body: data,
       })
         .then((res) => res.json())
-        .then((result) => {
-          console.log("result:" + JSON.stringify(result));
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ ...state, pic: result.pic })
-          );
-          dispatch({ type: "UPDATEPIC", payload: result.pic });
-          //window.location.reload();
+        .then((data) => {
+          // console.log("image ", image);
+          fetch(`${API_URL}/updatepic`, {
+            method: "put",
+            headers: {
+              "Content-Type": "application/json",
+              mode: "cors",
+              Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+              pic: data.url,
+              // pic: image,
+            }),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+              localStorage.setItem(
+                "user",
+                JSON.stringify({ ...state, pic: result.pic })
+              );
+              dispatch({ type: "UPDATEPIC", payload: result.pic });
+              window.location.reload();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch((err) => {
           console.log(err);
         });
-      // })
-      // .catch((err) => {
-      //   console.log(err);
-      // });
     }
   }, [image]);
 
   const updatePhoto = (file) => {
-    // setImage(file);
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "instagram-clone");
-    data.append("cloud_name", "dtubo8vjd");
+    setImage(file);
+    // const data = new FormData();
+    // data.append("file", file);
+    // data.append("upload_preset", "instagram-clone");
+    // data.append("cloud_name", "dtubo8vjd");
 
-    // request to cloudinary
-    fetch("https://api.cloudinary.com/v1_1/dtubo8vjd/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setImage(data.url);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // // request to cloudinary
+    // fetch("https://api.cloudinary.com/v1_1/dtubo8vjd/image/upload", {
+    //   method: "post",
+    //   body: data,
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setImage(data.url);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (
